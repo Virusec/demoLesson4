@@ -1,4 +1,4 @@
-package com.example.demolesson4;
+package com.example.demolesson4.data;
 
 public class Person {
     private String name;
@@ -15,5 +15,13 @@ public class Person {
 
     public boolean isBlock() {
         return block;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBlock(boolean block) {
+        this.block = block;
     }
 }

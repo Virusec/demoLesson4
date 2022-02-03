@@ -1,4 +1,4 @@
-package com.example.demolesson4;
+package com.example.demolesson4.service;
 
 import org.springframework.web.bind.annotation.RequestParam;
 

@@ -1,5 +1,6 @@
-package com.example.demolesson4;
+package com.example.demolesson4.service.impl;
 
+import com.example.demolesson4.service.HelloService;
 import org.springframework.stereotype.Service;
 
 @Service
