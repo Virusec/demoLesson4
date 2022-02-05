@@ -1,14 +1,20 @@
 package com.example.demolesson4.service.list;
 
-import com.example.demolesson4.data.Person;
-
-public class Mylist {
-    Node head;
-    Node tail;
+public class Mylist<T> {
+    //Первый элемент списка
+    Node<T> head;
+    Node<T> tail;
     int size;
 
-    public boolean add(Person item) {
-        Node newNode = new Node();
+
+    public int size() {
+        //Количество элементов списка
+        return size;
+    }
+
+    //Добавление нового элемента в список
+    public void add(T item) {
+        Node<T> newNode = new Node<>();
         newNode.setItem(item);
         if (tail == null) {
             head = newNode;
@@ -17,20 +23,20 @@ public class Mylist {
         }
         tail = newNode;
         size++;
-        return true;
     }
 
-    public Person get(int index) {
+    //Получение элемента списка по его номеру
+    public T get(int index) {
         if (checkIndex(index)) {
-            Node currentNode = getNode(index);
+            Node<T> currentNode = getNode(index);
             return currentNode.getItem();
         } else {
             throw new IndexOutOfBoundsException();
         }
     }
 
-    private Node getNode(int index) {
-        Node currentNode = head;
+    private Node<T> getNode(int index) {
+        Node<T> currentNode = head;
         for (int i = 0; i < index; i++) {
             currentNode = currentNode.getNext();
         }
@@ -41,9 +47,10 @@ public class Mylist {
         return index >= 0 && index < size;
     }
 
-    public Person remove(int index) {
+    //Удаление элемента по его номеру
+    public T remove(int index) {
         if (checkIndex(index)) {
-            Node deleteNode;
+            Node<T> deleteNode;
             if (index == 0) {
                 deleteNode = head;
                 head = head.getNext();
@@ -51,9 +58,9 @@ public class Mylist {
                     tail = null;
                 }
             } else {
-                Node prevNode = getNode(index - 1);
+                Node<T> prevNode = getNode(index - 1);
                 deleteNode = prevNode.getNext();
-                Node nextNode = deleteNode.getNext();
+                Node<T> nextNode = deleteNode.getNext();
                 prevNode.setNext(nextNode);
                 if (nextNode == null) {
                     tail = prevNode;
@@ -64,9 +71,5 @@ public class Mylist {
         } else {
             throw new IndexOutOfBoundsException();
         }
-    }
-
-    public int size() {
-        return size;
     }
 }
