@@ -1,10 +1,14 @@
 package com.example.demolesson4.service;
 
+import com.example.demolesson4.data.Person;
+
 public interface PersonService {
 
-    String getPerson(Integer id);
+    Person getPerson(Integer id);
 
-    String getPersonWithPinCode(Integer id, int pinCode);
+    String getPersonName(Integer id);
+
+    String getPersonNameWithPinCode(Integer id, int pinCode);
 
     String updatePerson(String name, Boolean block, Integer id);
 

@@ -16,12 +16,12 @@ public class PersonController {
 
     @GetMapping(path = "/get/person/{id}")
     public String getPerson(@PathVariable("id") Integer id) {
-        return personService.getPerson(id);
+        return personService.getPersonName(id);
     }
 
     @GetMapping(path = "/get/fsb/person/{id}")
     public String getPersonWithPinCode(@RequestParam("pin-code") int pinCode, @PathVariable("id") Integer id) {
-        return personService.getPersonWithPinCode(id, pinCode);
+        return personService.getPersonNameWithPinCode(id, pinCode);
     }
 
     @GetMapping(path = "/put/person/{id}")

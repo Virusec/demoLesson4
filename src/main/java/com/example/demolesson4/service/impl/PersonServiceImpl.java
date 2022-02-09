@@ -4,28 +4,43 @@ import com.example.demolesson4.data.Person;
 import com.example.demolesson4.exception.NoAccessToPersonException;
 import com.example.demolesson4.exception.WrongPinCodeException;
 import com.example.demolesson4.service.PersonService;
-import com.example.demolesson4.service.list.Mylist;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    Mylist<Person> persons;
+    Map<Integer, Person> persons;
 
     int pinCode = 1234;
 
+    Integer nextId = 0;
+
     public PersonServiceImpl() {
-        this.persons = new Mylist<>();
-        persons.add(new Person("Игорь Задон", true));
-        persons.add(new Person("Миша Аверин", false));
-        persons.add(new Person("Митя Ровный", false));
-        persons.add(new Person("Катя Занина", false));
-        persons.add(new Person("Лена Горемыка", true));
+        this.persons = new HashMap<>();
+        persons.put(getNextId(), new Person("Игорь Задон", true));
+        persons.put(getNextId(), new Person("Миша Аверин", false));
+        persons.put(getNextId(), new Person("Митя Ровный", false));
+        persons.put(getNextId(), new Person("Катя Занина", false));
+        persons.put(getNextId(), new Person("Лена Горемыка", true));
+    }
+
+    private Integer getNextId() {
+        Integer result = nextId;
+        nextId = nextId + 1;
+        return result;
     }
 
     @Override
-    public String getPerson(Integer id) {
-        if (persons.size() > id) {
+    public Person getPerson(Integer id) {
+        return persons.get(id);
+    }
+
+    @Override
+    public String getPersonName(Integer id) {
+        if (persons.containsKey(id)) {
             try {
                 //Блок кода в котором мы хотим поймать ошибку
                 return getPersonWithoutPinCode(id);
@@ -51,17 +66,20 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public String getPersonWithPinCode(Integer id, int pinCode) {
-        if (this.pinCode == pinCode) {
+    public String getPersonNameWithPinCode(Integer id, int pinCode) {
+        if (persons.containsKey(id)) {
+            if (this.pinCode != pinCode) {
+                throw new WrongPinCodeException();
+            }
             return persons.get(id).getName();
         } else {
-            throw new WrongPinCodeException();
+            return getNotFoundMessage(id);
         }
     }
 
     @Override
     public String updatePerson(String name, Boolean block, Integer id) {
-        if (persons.size() > id) {
+        if (persons.containsKey(id)) {
             Person person = persons.get(id);
             if (!person.isBlock()) {
                 person.setName(name);
@@ -70,7 +88,6 @@ public class PersonServiceImpl implements PersonService {
             } else {
                 return getNoAccessMessage();
             }
-
         } else {
             return getNotFoundMessage(id);
         }
@@ -78,12 +95,17 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public String addPerson(String name, Boolean block) {
-        return null;
+        persons.put(getNextId(), new Person(name, block));
+        return name;
     }
 
     @Override
     public String removePerson(Integer id) {
-        return null;
+        if (persons.containsKey(id)) {
+            return persons.remove(id).getName();
+        } else {
+            return getNotFoundMessage(id);
+        }
     }
 
     private String getPersonWithoutPinCode(Integer id) throws NoAccessToPersonException {
