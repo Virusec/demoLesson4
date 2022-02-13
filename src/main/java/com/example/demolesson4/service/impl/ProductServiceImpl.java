@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -27,34 +28,40 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<String> getProductsNameByType(String type) {
-        List<String> searchResult = new ArrayList<>();
-        for (Product product : products) {
-            if (product.getType().equals(type)) {
-                searchResult.add(product.getName());
-            }
-        }
-        return searchResult;
+        return products.stream()
+                .filter(product -> product.getType().equals(type))
+                .map(product -> product.getName())
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<String> getAllProductsName() {
-        List<String> searchResult = new ArrayList<>();
-        for (Product product : products) {
-            searchResult.add(product.getName());
-        }
-        searchResult.sort(String::compareTo);
-        return searchResult;
+        return products.stream()
+                .map(product -> product.getName())
+                .sorted(String::compareTo)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public int countProductsByType(String type) {
-        int count = 0;
-        for (Product product : products) {
-            if (product.getType().equals(type)) {
-                count++;
-            }
-        }
-        return count;
+    public long countProductsByType(String type) {
+        return products.stream()
+                .filter(product -> product.getType().equals(type))
+                .map(product -> product.getName())
+                .count();
+    }
+
+    public String getProductNameByType(String type) {
+        return products.stream()
+                .filter(product -> product.getType().equals(type))
+                .map(product -> product.getName())
+                .findFirst()
+                .orElse("Not found");
+    }
+
+    public void changeNameByName(String fromName, String toName) {
+        products.stream()
+                .filter(product -> product.getName().equals(fromName))
+                .forEach(product -> product.setName(toName));
     }
 
     @Override

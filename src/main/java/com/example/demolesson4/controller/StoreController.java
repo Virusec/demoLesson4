@@ -26,8 +26,18 @@ public class StoreController {
     }
 
     @GetMapping(path = "/get/count-by-type")
-    public int countsProductByType(@RequestParam("type") String type) {
+    public long countsProductByType(@RequestParam("type") String type) {
         return productService.countProductsByType(type);
+    }
+
+    @GetMapping(path = "/patch/product/")
+    public void changeNameByName(@RequestParam("fromName") String fromName,@RequestParam("toName") String toName) {
+        productService.changeNameByName(fromName, toName);
+    }
+
+    @GetMapping(path = "/get/product/")
+    public String getProductNameByType(@RequestParam("type") String type) {
+        return productService.getProductNameByType(type);
     }
 
     @GetMapping(path = "/post/add-product")
